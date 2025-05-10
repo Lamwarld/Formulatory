@@ -1,11 +1,10 @@
-import sqlite3 as sql
-import tkinter as tk
-from tkinter import ttk
 from sys import exc_info
-# import manim
-
+import sqlite3 as sql
 
 class SQLiteDB():
+    """
+    Подключение к базе данных и обработка with, обработка методов, команд баз данных
+    """
     def __init__(self, db_name):
         self.db_name = db_name
         self.connection = None
