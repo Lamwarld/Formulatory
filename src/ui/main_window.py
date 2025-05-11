@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tab_frame import *
 # import manim
 
 
@@ -12,7 +13,6 @@ class TkinterWindow(tk.Tk):
         self.size = size
 
         self.build_ui()
-        self.configure_style()
 
         self.mainloop()
 
@@ -28,18 +28,14 @@ class TkinterWindow(tk.Tk):
             self.geometry(f"{self.size[0]}x{self.size[1]}")
 
     
-    def configure_style(self):
-        style = ttk.Style()
-        # style.configure('TNotebook.Tab', padding=(20, 5), stretch=True)  # Растягиваем вкладки
-
-    
     def build_ui(self):
         self.setting_window_give()
+        self.title_create()
         self.notebook_create()
 
     
     def frame_for_notebook_create(self):
-        self.frame_filter = ttk.Frame(self.notebook)
+        self.frame_filter = FilterTab(self.notebook)
         self.frame_formula = ttk.Frame(self.notebook)
         self.frame_management = ttk.Frame(self.notebook)
 
@@ -61,6 +57,9 @@ class TkinterWindow(tk.Tk):
                         
 
     def notebook_create(self):
+        """
+        Класс для создания и настройки вкладок
+        """
         self.notebook = ttk.Notebook()
         self.notebook.pack(fill="both", expand=True)
 
@@ -71,7 +70,15 @@ class TkinterWindow(tk.Tk):
             self.notebook.add(frame, text=title)
 
 
-    # def 
+    def title_create(self):
+        """
+        Функция для создания заголовка
+        """
+        title_frame = ttk.Frame(self, height=100)
+        title_frame.pack(fill="x")
+
+        title_label = ttk.Label(title_frame, text="Формулатория", anchor="center", font=('Bahnschrift SemiBold SemiConden', 24))
+        title_label.pack(pady=10)      
             
 
-TkinterWindow("test", (False, False), "fullscreen")
+TkinterWindow("Очень крутая программа от Lamwarld", (False, False), "fullscreen")
