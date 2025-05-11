@@ -30,8 +30,21 @@ class TkinterWindow(tk.Tk):
     
     def build_ui(self):
         self.setting_window_give()
+        self.style_create()
         self.title_create()
         self.notebook_create()
+
+
+    def style_create(self):
+        style = ttk.Style()
+        # для расстяжения вкладок
+        self.update_idletasks()    
+        style.configure('TNotebook.Tab',
+                        padding=(0, 1),
+                        stretch=True,
+                        anchor="center",
+                        width=self.winfo_width(),
+                        font=('Bahnschrift SemiBold SemiConden', 18))
 
     
     def frame_for_notebook_create(self):
@@ -42,19 +55,7 @@ class TkinterWindow(tk.Tk):
         self.frames_for_notebook = {self.frame_filter: "Фильтр", 
                                    self.frame_formula: "Формула", 
                                    self.frame_management: "Управление"}
-        
-    
-    def style_for_notebook_create(self):
-        style = ttk.Style()
-        # для расстяжения вкладок
-        self.update_idletasks()    
-        style.configure('TNotebook.Tab',
-                        padding=(0, 1),
-                        stretch=True,
-                        anchor="center",
-                        width=self.winfo_width(),
-                        font=('Bahnschrift SemiBold SemiConden', 18))
-                        
+                             
 
     def notebook_create(self):
         """
@@ -64,7 +65,6 @@ class TkinterWindow(tk.Tk):
         self.notebook.pack(fill="both", expand=True)
 
         self.frame_for_notebook_create()
-        self.style_for_notebook_create()
         
         for frame, title in self.frames_for_notebook.items():
             self.notebook.add(frame, text=title)

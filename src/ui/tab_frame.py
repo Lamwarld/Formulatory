@@ -11,6 +11,7 @@ class FilterTab(ttk.Frame):
 
     
     def build_ui(self):
+        self.style_create()
         self.branch_selector_create()
         
 
@@ -18,8 +19,16 @@ class FilterTab(ttk.Frame):
         self.label_branch = ttk.Label(self, text="Выберите раздел", font=("Bahnschrift SemiBold SemiConden", 16))
         self.label_branch.grid(row=0, column=0, padx=10, pady=10)
 
-        self.combobox_branches = ttk.Combobox(self, height=50, width=60)
+        val = ["jopa", "xui"]
+
+        self.combobox_branches = ttk.Combobox(self, values=val, width=50, style="TCombobox", justify="center")
         self.combobox_branches.grid(row=1, column=0, padx=10, pady=10)
+
+    
+    def style_create(self):
+        style = ttk.Style()
+        self.option_add("*TCombobox.font", ("Arial", 16))
+        self.option_add("*TCombobox*Listbox.font", ("Arial", 16))
 
 
 class FormulaTab(ttk.Frame):

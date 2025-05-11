@@ -5,6 +5,4 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Специфичные файлы проекта
-formulatory/m.py
-formulatory/t.py
+.formulatory/scr/m.py
