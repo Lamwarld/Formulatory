@@ -1,4 +1,9 @@
 # Created by venv; see https://docs.python.org/3/library/venv.html
-# .formulatory/.venv/.cache/
+# Кэш Python
 __pycache__/
-.formulatory/m.py
+*.pyc
+*.pyo
+*.pyd
+
+# Специфичные файлы проекта
+formulatory/m.py
