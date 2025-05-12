@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class FilterTab(ttk.Frame):
     """
     Класс для реализации вкладки 'Фильтр'
