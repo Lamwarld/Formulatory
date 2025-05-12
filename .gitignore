@@ -1,5 +1,5 @@
 # Кэш Python
 __pycache__/
 
-scr/m.py
+src/m.py
 .venv/

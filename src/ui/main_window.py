@@ -22,10 +22,10 @@ class TkinterWindow(tk.Tk):
         self.resizable(*self.win_resizable)
         # self.iconbitmap()
 
-        if self.size == "fullscreen": 
-            self.state("zoomed")
-        else:
-            self.geometry(f"{self.size[0]}x{self.size[1]}")
+        # if self.size == "fullscreen": 
+        #     self.state("zoomed")
+        # else:
+        self.geometry(f"{self.size[0]}x{self.size[1]}")
 
     
     def build_ui(self):
@@ -81,4 +81,4 @@ class TkinterWindow(tk.Tk):
         title_label.pack(pady=10)      
             
 
-TkinterWindow("Очень крутая программа от Lamwarld", (False, False), "fullscreen")
+TkinterWindow("Очень крутая программа от Lamwarld", (False, False), (1200, 800))
