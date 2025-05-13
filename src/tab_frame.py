@@ -53,7 +53,7 @@ class BranchTab(ttk.Frame):
         self.branch_treeview.delete(*self.branch_treeview.get_children())
 
         if data is None:
-            data = self.api_db.select('formulatory.db', ())
+            data = self.api_db.selectall("formulatory.db", column_name="name", table_name="formula_category", value=())
 
         for row in data:
             self.branch_treeview.insert("", "end", values=row)
@@ -68,7 +68,7 @@ class BranchTab(ttk.Frame):
     
     def __create_CRUD(self):
         self.label_CRUD = ttk.Label(self, 
-                                    text="Введите для изменения, добавления или удаления", 
+                                    text="Введите для изменения, добавления", 
                                     font=("Arial", 16))
         self.label_CRUD.grid(row=1, column=1, padx=10, pady=20)
 
@@ -122,7 +122,7 @@ class BranchTab(ttk.Frame):
                 if len(branch_is_exist) == 0:
                     messagebox.showerror("Ошибка!", icon="error", message="Произошла ошибка во время \n изменения категории", detail="Такого раздела не существует")
                 else:
-                    branch_already_exist = self.api_db.selectall_where("formulatory.db",
+                    branch_already_exist = self.api_db.selectall_where("formulatory.db", column_name="name", 
                                                                         ("formula_category", "name", self.user_input))
                     
                     if len(branch_already_exist) > 0:

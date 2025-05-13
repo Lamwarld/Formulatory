@@ -6,16 +6,16 @@ class API:
         pass
 
 
-    def selectall_where(self, db_name, value):
-        query = """SELECT * from ? WHERE ?='?'"""
+    def selectall_where(self, db_name, value, table_name, column_name="*"):
+        query = f"""SELECT {column_name} from {table_name} WHERE ?='?'"""
         with SQLiteDB (db_name) as db:
             db.execute(query, value)
             result = db.fetchall()
         return (row for row in result) if result else ()
 
     
-    def select(self, db_name, value):
-        query = """SELECT ? FROM ?"""
+    def selectall(self, db_name, value, table_name, column_name):
+        query = f"""SELECT {column_name} FROM {table_name}"""
         with SQLiteDB(db_name) as db:
             db.execute(query, value)
             result = db.fetchall()
