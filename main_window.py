@@ -22,11 +22,7 @@ class TkinterWindow(tk.Tk):
     def setting_window_give(self):
         self.title(self.win_title)
         self.resizable(*self.win_resizable)
-        # self.iconbitmap()
 
-        # if self.size == "fullscreen": 
-        #     self.state("zoomed")
-        # else:
         self.geometry(f"{self.size[0]}x{self.size[1]}")
 
     
@@ -84,4 +80,4 @@ class TkinterWindow(tk.Tk):
 
             
 
-TkinterWindow("Очень крутая программа от Lamwarld", (False, False), (1200, 1000))
+TkinterWindow("Формулатория", (False, False), (1200, 1000))

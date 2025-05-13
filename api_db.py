@@ -1,14 +1,21 @@
 from connection import *
 
 
-class API:
+class APIFormula:
     def __init__(self):
-        pass
+        self.db_name = "formula.db"
+
+    
+    def execute_query(self, query, params):
+        try:
+            with SQLiteDB(self.db_name) as db:
+                db.execute(query, params)
+        except:
+            print("Ошибка execute")
 
 
     def select_all(
         self,
-        db_name: str,
         table: str,
         columns: str = "*",
         where: dict = None,
@@ -45,26 +52,25 @@ class API:
             query += f" LIMIT {limit}"
 
         # Выполняем запрос
-        with SQLiteDB(db_name) as db:
+        with SQLiteDB(self.db_name) as db:
             db.execute(query, params)
             result = db.fetchall()
 
-        return (row for row in result) if result else ()
+        return tuple(result) if result else ()
     
 
-    def delete_category(self, db_name):
-        pass
+    def delete_branch(self, name):
+        query = "DELETE FROM formula_category WHERE name = ?"
+        return self.execute_query(query, (name,))
 
 
-    def update_category(self, value):
+    def update_branch(self, new_name, old_name):
         query = """UPDATE formula_category SET name=? WHERE name=?"""
-        with SQLiteDB("formulatory.db") as db:
-            db.execute(query, value)
+        self.execute_query(query, (new_name, old_name))
 
 
-    def create_category(self, db_name, value):
-        query = """INSERT INTO formula_category("name") VALUES(?)"""
-        with SQLiteDB(db_name) as db:
-            db.execute(query, value)
+    def create_branch(self, name):
+        query = """INSERT INTO formula_category ("name") VALUES (?)"""
+        self.execute_query(query, (name,))
             
 
