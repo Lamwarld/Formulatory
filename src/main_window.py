@@ -3,6 +3,8 @@ from tkinter import ttk
 from tab_frame import *
 # import manim
 
+from api_db import *
+
 
 class TkinterWindow(tk.Tk):
     # UI программы
@@ -48,13 +50,13 @@ class TkinterWindow(tk.Tk):
 
     
     def frame_for_notebook_create(self):
-        self.frame_filter = FilterTab(self.notebook)
-        self.frame_formula = ttk.Frame(self.notebook)
-        self.frame_management = ttk.Frame(self.notebook)
+        self.frame_branch = BranchTab(self.notebook)
+        self.frame_formula = FormulaTab(self.notebook)
+        self.frame_output = OutputTab(self.notebook)
 
-        self.frames_for_notebook = {self.frame_filter: "Фильтр", 
+        self.frames_for_notebook = {self.frame_branch: "Категории", 
                                    self.frame_formula: "Формула", 
-                                   self.frame_management: "Управление"}
+                                   self.frame_output: "Вывод"}
                              
 
     def notebook_create(self):
@@ -79,6 +81,7 @@ class TkinterWindow(tk.Tk):
 
         title_label = ttk.Label(title_frame, text="Формулатория", anchor="center", font=('Bahnschrift SemiBold SemiConden', 24))
         title_label.pack(pady=10)      
+
             
 
 TkinterWindow("Очень крутая программа от Lamwarld", (False, False), (1200, 800))
