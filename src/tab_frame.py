@@ -15,7 +15,6 @@ class BranchTab(ttk.Frame):
         
         self.old_name_selected_branch = ''
         self.selected_branch = tk.StringVar(); self.selected_branch.set("Сейчас выбрано: ")
-        self.user_input = tk.StringVar()
 
         self.__build_ui()
 
@@ -53,7 +52,7 @@ class BranchTab(ttk.Frame):
         self.branch_treeview.delete(*self.branch_treeview.get_children())
 
         if data is None:
-            data = self.api_db.selectall("formulatory.db", column_name="name", table_name="formula_category", value=())
+            data = self.api_db.select_all("formulatory.db", columns="name", table="formula_category")
 
         for row in data:
             self.branch_treeview.insert("", "end", values=row)
@@ -75,14 +74,14 @@ class BranchTab(ttk.Frame):
         self.label_selected_branch = ttk.Label(self, textvariable=self.selected_branch, font=("Arial", 16))
         self.label_selected_branch.grid(row=1, column=0, padx=10, pady=10)
 
-        self.entry = ttk.Entry(self, textvariable=self.user_input, width=40, font=("Arial", 16))
+        self.entry = ttk.Entry(self, width=40, font=("Arial", 16))
         self.entry.grid(row=2, column=1, padx=10, pady=10)
 
         self.__create_CRUD_button()
 
     
     def __create_CRUD_button(self):
-        button_frame = ttk.Frame(self, relief="solid", borderwidth=2)
+        button_frame = ttk.Frame(self)
         button_frame.grid_columnconfigure(1, weight=1)
         button_frame.grid(row=0, column=1, sticky="we", padx=10, pady=10)
 
@@ -117,13 +116,16 @@ class BranchTab(ttk.Frame):
             if self.entry.get() == "":
                 messagebox.showerror("Ошибка!", icon="error", message="Произошла ошибка во время \n изменения категории", detail="Раздел не выбран!")
             else:
-                branch_is_exist = self.api_db.selectall_where("formulatory.db", 
-                                                            ("formula_category", "name", self.old_name_selected_branch))
+                branch_is_exist = self.api_db.select_all("formulatory.db", columns="name", table="formula_category",
+                                                          where={"name": self.old_name_selected_branch}) 
+                                                            
                 if len(branch_is_exist) == 0:
                     messagebox.showerror("Ошибка!", icon="error", message="Произошла ошибка во время \n изменения категории", detail="Такого раздела не существует")
                 else:
-                    branch_already_exist = self.api_db.selectall_where("formulatory.db", column_name="name", 
-                                                                        ("formula_category", "name", self.user_input))
+                    value = self.entry.get()
+                    branch_already_exist = self.api_db.select_all("formulatory.db", columns="name", table="formula_category",
+                                                                  where={"name": value})
+                                                                        
                     
                     if len(branch_already_exist) > 0:
                         messagebox.showerror("Ошибка!", icon="error", message="Произошла ошибка во время \n изменения категории", detail="Такой раздел уже существует")

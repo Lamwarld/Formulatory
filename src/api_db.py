@@ -6,19 +6,49 @@ class API:
         pass
 
 
-    def selectall_where(self, db_name, value, table_name, column_name="*"):
-        query = f"""SELECT {column_name} from {table_name} WHERE ?='?'"""
-        with SQLiteDB (db_name) as db:
-            db.execute(query, value)
-            result = db.fetchall()
-        return (row for row in result) if result else ()
+    def select_all(
+        self,
+        db_name: str,
+        table: str,
+        columns: str = "*",
+        where: dict = None,
+        order_by: str = None,
+        limit: int = None):
+        """
+        Универсальный метод для SELECT-запросов.
+        
+        Параметры:
+            - db_name: Имя базы данных.
+            - table_name: Имя таблицы.
+            - columns: Строка с именами столбцов (по умолчанию "*").
+            - where: Словарь условий {column: value} (например, {"id": 5, "name": "John"}).
+            - order_by: Строка для сортировки (например, "id DESC").
+            - limit: Ограничение количества строк.
+        
+        Возвращает генератор строк (или пустой генератор, если нет данных).
+        """
+        query = f"SELECT {columns} FROM {table}"
+        params = []
 
-    
-    def selectall(self, db_name, value, table_name, column_name):
-        query = f"""SELECT {column_name} FROM {table_name}"""
+        # Динамическое добавление WHERE (если есть условия)
+        if where:
+            where_clause = " AND ".join(f"{col} = ?" for col in where.keys())
+            query += f" WHERE {where_clause}"
+            params.extend(where.values())
+
+        # Добавляем сортировку (ORDER BY)
+        if order_by:
+            query += f" ORDER BY {order_by}"
+
+        # Добавляем лимит (LIMIT)
+        if limit:
+            query += f" LIMIT {limit}"
+
+        # Выполняем запрос
         with SQLiteDB(db_name) as db:
-            db.execute(query, value)
+            db.execute(query, params)
             result = db.fetchall()
+
         return (row for row in result) if result else ()
     
 
