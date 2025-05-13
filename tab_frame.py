@@ -185,27 +185,56 @@ class FormulaTab(ttk.Frame):
     def build_ui(self):
         self.__style_create()
         self.__combobox_create()
+        self.__scrolled_treeview_create()
 
 
     def __style_create(self):
+        style = ttk.Style()
+
         self.option_add("*TCombobox.font", ("Arial", 16))
         self.option_add("*TCombobox*Listbox.font", ("Arial", 16))
+        
+        self.grid_columnconfigure(1, weight=1)
 
 
     def __combobox_create(self):
         try:
+            self.label_branch = ttk.Label(self, text="Выберите раздел", font=("Arial", 16))
+            self.label_branch.grid(row=0, column=0, padx=10, pady=10)
+
             branches = self.api_db.select_all(columns="name", table="formula_category")
             branches = [val[0] for val in branches if val]
 
             self.branch_combobox = ttk.Combobox(self, values=branches, width=40, state="readonly")
-            self.branch_combobox.grid(row=0, column=0, padx=10, pady=10)
+            self.branch_combobox.grid(row=1, column=0, padx=10, pady=10)
         except:
             self.branch_combobox = ttk.Combobox(self, values=["Ошибка загрузки"], width=40, state="disabled")
         
 
 
-    def __treeview_create(self):
-        pass
+    def __scrolled_treeview_create(self):
+        scrolled_frame = ttk.Frame(self)
+        scrolled_frame.grid(row=2, column=0, padx=10, pady=10)
+
+        scrollbar = ttk.Scrollbar(scrolled_frame, orient="vertical")
+        scrollbar.pack(side="right", fill="y")
+
+        treeview_formula = ttk.Treeview(
+            scrolled_frame,
+            columns=("branch", "name", "formula"),
+            show="headings",
+            yscrollcommand=scrollbar.set
+        )
+        treeview_formula.pack(expand=True, fill="both")
+
+        scrollbar.config(command=treeview_formula.yview)
+
+        treeview_formula.heading("branch", text="Раздел")
+        treeview_formula.heading("name", text="Название")
+        treeview_formula.heading("formula", text="Формула")
+        treeview_formula.column("branch", width=150)
+        treeview_formula.column("name", width=150)
+        treeview_formula.column("formula", width=150)
 
 
 class OutputTab(ttk.Frame):
