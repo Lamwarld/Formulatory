@@ -1,7 +1,7 @@
 from sys import exc_info
 import sqlite3 as sql
 
-class SQLiteDB():
+class SQLiteDB:
     """
     Подключение к базе данных и обработка with, обработка методов, команд баз данных
     """
