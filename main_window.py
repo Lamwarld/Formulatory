@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tab_frame import *
 
+
 from api_db import *
 
 
@@ -51,7 +52,7 @@ class TkinterWindow(tk.Tk):
 
         self.frames_for_notebook = {self.frame_formula: "Формула", 
                                    self.frame_branch: "Разделы", 
-                                   self.frame_output: "Вывод"}
+                                   self.frame_output: "Вывод формулы"}  
                              
 
     def notebook_create(self):

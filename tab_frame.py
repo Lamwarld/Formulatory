@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+from PIL import Image, ImageTk
 
 from api_db import *
+from manim_renderer import *
 
 
 class BranchTab(ttk.Frame):
@@ -179,6 +181,9 @@ class FormulaTab(ttk.Frame):
     def __init__(self, master):
         super().__init__(master=master)
         self.api_db = APIFormula()
+        self.renderer = FormulaRendererManim()
+        self.current_image = None
+
         self.build_ui()
 
     
@@ -244,6 +249,8 @@ class FormulaTab(ttk.Frame):
         self.treeview_formula.column("name", width=500)
         self.treeview_formula.column("formula", width=200)
 
+        self.treeview_formula.bind("<<TreeviewSelect>>",lambda e: self.__on_formula_select())
+
         self.__update_treeview()
 
 
@@ -268,6 +275,45 @@ class FormulaTab(ttk.Frame):
                 branch_row = row[2]
                 self.treeview_formula.insert("", "end", values=(branch_row, name, expresssion))
 
+
+    def __on_formula_select(self):
+        selected = self.treeview_formula.selection()
+        if not selected:
+            return
+        
+        item = self.treeview_formula.item(selected[0])
+        formula = item["values"][2]
+
+        self.__display_formula_image(formula)
+
+    
+    def __display_formula_image(self, formula):
+        for widget in self.formula_frame.winfo_children():
+            widget.destroy()
+
+        try:
+            img = self.renderer.render_formula_to_image(formula)
+            if img is None:
+                raise ValueError("Не удалось сгенерировать изображение формулы")
+            
+            # Масштабируем изображение
+            img = img.resize((600, 200), Image.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+            
+            # Сохраняем ссылку, чтобы изображение не удалилось сборщиком мусора
+            self.current_image = photo
+            
+            # Создаем Label для отображения формулы
+            formula_label = ttk.Label(self.formula_frame, image=photo)
+            formula_label.pack(pady=20, padx=20, fill="both", expand=True)
+            
+        except Exception as e:
+            error_label = ttk.Label(
+                self.formula_frame, 
+                text=f"Ошибка отображения формулы:\n{str(e)}",
+                foreground="red"
+            )
+            error_label.pack(pady=20)
 
 
 class OutputTab(ttk.Frame):
