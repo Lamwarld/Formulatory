@@ -183,8 +183,8 @@ class FormulaTab(ttk.Frame):
 
     
     def build_ui(self):
-        self.__style_create()
         self.frame_create()
+        self.__style_create()
         self.__combobox_create()
         self.__scrolled_treeview_create()
 
@@ -196,15 +196,16 @@ class FormulaTab(ttk.Frame):
         self.option_add("*TCombobox*Listbox.font", ("Arial", 16))
         
         self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(3, weight=1)
 
     
     def frame_create(self):
         self.scrolled_frame = ttk.Frame(self)
-        self.scrolled_frame.grid_columnconfigure(0, weight=1)
-        self.scrolled_frame.grid_rowconfigure(0, weight=1)
-        
-        self.scrolled_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nswe")
+        self.formula_frame = ttk.Frame(self, relief="solid", borderwidth=2)
 
+        
+        self.scrolled_frame.grid(row=2, column=0, padx=10, pady=10, sticky="we")
+        self.formula_frame.grid(row=3, column=0, padx=10, pady=10, sticky="we")
 
     def __combobox_create(self):
         try:
