@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tab_frame import *
-# import manim
 
 from api_db import *
 

@@ -184,6 +184,7 @@ class FormulaTab(ttk.Frame):
     
     def build_ui(self):
         self.__style_create()
+        self.frame_create()
         self.__combobox_create()
         self.__scrolled_treeview_create()
 
@@ -194,7 +195,15 @@ class FormulaTab(ttk.Frame):
         self.option_add("*TCombobox.font", ("Arial", 16))
         self.option_add("*TCombobox*Listbox.font", ("Arial", 16))
         
-        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
+    
+    def frame_create(self):
+        self.scrolled_frame = ttk.Frame(self)
+        self.scrolled_frame.grid_columnconfigure(0, weight=1)
+        self.scrolled_frame.grid_rowconfigure(0, weight=1)
+        
+        self.scrolled_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nswe")
 
 
     def __combobox_create(self):
@@ -207,34 +216,57 @@ class FormulaTab(ttk.Frame):
 
             self.branch_combobox = ttk.Combobox(self, values=branches, width=40, state="readonly")
             self.branch_combobox.grid(row=1, column=0, padx=10, pady=10)
+
+            self.branch_combobox.bind("<<ComboboxSelected>>", lambda event: self.__update_treeview())
         except:
             self.branch_combobox = ttk.Combobox(self, values=["Ошибка загрузки"], width=40, state="disabled")
         
 
-
     def __scrolled_treeview_create(self):
-        scrolled_frame = ttk.Frame(self)
-        scrolled_frame.grid(row=2, column=0, padx=10, pady=10)
-
-        scrollbar = ttk.Scrollbar(scrolled_frame, orient="vertical")
+        scrollbar = ttk.Scrollbar(self.scrolled_frame, orient="vertical")
         scrollbar.pack(side="right", fill="y")
 
-        treeview_formula = ttk.Treeview(
-            scrolled_frame,
+        self.treeview_formula = ttk.Treeview(
+            self.scrolled_frame,
             columns=("branch", "name", "formula"),
             show="headings",
             yscrollcommand=scrollbar.set
         )
-        treeview_formula.pack(expand=True, fill="both")
+        self.treeview_formula.pack(expand=True, fill="both")
 
-        scrollbar.config(command=treeview_formula.yview)
+        scrollbar.config(command=self.treeview_formula.yview)
 
-        treeview_formula.heading("branch", text="Раздел")
-        treeview_formula.heading("name", text="Название")
-        treeview_formula.heading("formula", text="Формула")
-        treeview_formula.column("branch", width=150)
-        treeview_formula.column("name", width=150)
-        treeview_formula.column("formula", width=150)
+        self.treeview_formula.heading("branch", text="Раздел")
+        self.treeview_formula.heading("name", text="Название")
+        self.treeview_formula.heading("formula", text="Формула")
+        self.treeview_formula.column("branch", width=100)
+        self.treeview_formula.column("name", width=500)
+        self.treeview_formula.column("formula", width=200)
+
+        self.__update_treeview()
+
+
+    def __update_treeview(self, data=None):
+            self.treeview_formula.delete(*self.treeview_formula.get_children())
+            branch = self.branch_combobox.get()
+
+            try:
+                data = self.api_db.select_all(
+                    table=["formula", "formula_category"],
+                    columns="formula.name, formula.expression, formula_category.name",
+                    join_conditions=["formula.id_formula_category = formula_category.id"],
+                    where={"formula_category.name": branch} if branch else None
+                )
+                    
+            except Exception as e:
+                messagebox.showerror("Ошибка", f"Не удалось загрузить формулы: {str(e)}")
+
+            for row in data:
+                name = row[0]
+                expresssion = row[1]
+                branch_row = row[2]
+                self.treeview_formula.insert("", "end", values=(branch_row, name, expresssion))
+
 
 
 class OutputTab(ttk.Frame):

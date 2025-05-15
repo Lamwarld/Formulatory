@@ -16,11 +16,13 @@ class APIFormula:
 
     def select_all(
         self,
-        table: str,
+        table,
         columns: str = "*",
         where: dict = None,
         order_by: str = None,
-        limit: int = None):
+        limit: int = None,
+        join_conditions: list = None,
+        join_type: str = "INNER"):
         """
         Универсальный метод для SELECT-запросов.
         
@@ -31,11 +33,20 @@ class APIFormula:
             - where: Словарь условий {column: value} (например, {"id": 5, "name": "John"}).
             - order_by: Строка для сортировки (например, "id DESC").
             - limit: Ограничение количества строк.
+            - join_type: Тип соединения (INNER, LEFT, RIGHT, FULL) - по умолчанию INNER
+            - join_conditions: Список условий соединения (например, ["table1.id = table2.table1_id"])
         
         Возвращает генератор строк (или пустой генератор, если нет данных).
         """
-        query = f"SELECT {columns} FROM {table}"
+        if isinstance(table, str):
+            table = [table]
+
+        query = f"SELECT {columns} FROM {table[0]}"
         params = []
+
+        if join_conditions and isinstance(table, list):
+            for i in range(1, len(table)):
+                query += f" {join_type} JOIN {table[i]} ON {join_conditions[i-1]}"
 
         # Динамическое добавление WHERE (если есть условия)
         if where:
@@ -72,5 +83,3 @@ class APIFormula:
     def create_branch(self, name):
         query = """INSERT INTO formula_category ("name") VALUES (?)"""
         self.execute_query(query, (name,))
-            
-
