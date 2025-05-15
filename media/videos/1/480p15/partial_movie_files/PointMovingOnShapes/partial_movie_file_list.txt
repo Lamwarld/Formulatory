@@ -1,4 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/home/lama/formulatory/media/videos/1/480p15/partial_movie_files/PointMovingOnShapes/1185818338_319549621_223132457.mp4'
-file 'file:/home/lama/formulatory/media/videos/1/480p15/partial_movie_files/PointMovingOnShapes/624642324_796011999_666618010.mp4'
-file 'file:/home/lama/formulatory/media/videos/1/480p15/partial_movie_files/PointMovingOnShapes/624642324_1122450819_1004412148.mp4'

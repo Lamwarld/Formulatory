@@ -2,4 +2,5 @@
 __pycache__/
 
 src/m.py
-.venv/
+form/
+image/

@@ -50,8 +50,8 @@ class TkinterWindow(tk.Tk):
         self.frame_formula = FormulaTab(self.notebook)
         self.frame_output = OutputTab(self.notebook)
 
-        self.frames_for_notebook = {self.frame_formula: "Формула", 
-                                   self.frame_branch: "Разделы", 
+        self.frames_for_notebook = {self.frame_branch: "Разделы", 
+                                   self.frame_formula: "Формула", 
                                    self.frame_output: "Вывод формулы"}  
                              
 
@@ -80,4 +80,4 @@ class TkinterWindow(tk.Tk):
 
             
 
-TkinterWindow("Формулатория", (False, False), (1200, 1000))
+TkinterWindow("Формулатория", (False, False), (1200, 700))
